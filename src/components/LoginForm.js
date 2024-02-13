@@ -1,24 +1,29 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "./css/FormStyles.css";
 
 function LoginForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch("http://your-api-url/login", {
+      const response = await fetch("http://localhost:3000/users/sign_in", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ user: { email, password } }),
       });
       const data = await response.json();
-      // Handle response data (e.g., set user authentication token)
-      console.log(data);
+      if (response.ok) {
+        localStorage.setItem("token", data.token);
+        navigate("/calendar");
+      } else {
+        console.error("Login failed:", data.error);
+      }
     } catch (error) {
       console.error("Error:", error);
     }

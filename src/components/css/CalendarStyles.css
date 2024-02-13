@@ -1,0 +1,64 @@
+/* CalendarStyles.css */
+
+/* Calendar container */
+.calendar-container {
+  flex: 1; /* Take up remaining space */
+  display: flex;
+  flex-direction: column;
+}
+
+/* Calendar table styles */
+.calendar-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed; /* Ensure uniform cell widths */
+}
+
+.calendar-table th,
+.calendar-table td {
+  border: 1px solid #ccc;
+  padding: 10px;
+  text-align: left;
+  vertical-align: top;
+  height: calc((100vh - 460px) / 6); /* Adjust the height dynamically */
+}
+
+/* Calendar header styles */
+.calendar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  background-color: #f0f0f0;
+}
+
+.calendar-header button {
+  padding: 10px 20px;
+  font-size: 16px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+/* Button to return to the current day */
+.calendar-container button {
+  margin-top: 20px;
+  padding: 10px 20px;
+  font-size: 16px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+/* Event styles */
+.event {
+  background-color: #007bff; /* Blue background color */
+  color: #fff; /* White text color */
+  padding: 5px 10px;
+  border-radius: 5px; /* Rounded corners */
+  margin-top: 5px;
+}
+
+.calendar-cell.has-event:hover {
+  cursor: pointer;
+}
