@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./css/CalendarStyles.css";
 import EventDetailsPopup from "./EventDetailsPopup";
 
@@ -9,13 +9,31 @@ function Calendar() {
   // State for selected event
   const [selectedEvent, setSelectedEvent] = useState(null);
 
-  // Mock event data (replace this with actual API call to fetch events)
-  const events = [
-    { date: "2024-02-14", title: "Meeting with Client" },
-    { date: "2024-02-14", title: "Valentines Day" },
-    { date: "2024-02-20", title: "Team Lunch" },
-    // Add more sample events as needed
-  ];
+  // State to store fetched events
+  const [events, setEvents] = useState([]);
+
+  // Function to fetch events from the API
+  const fetchEvents = async () => {
+    try {
+      const response = await fetch("http://localhost:3000/api/v1/events");
+      if (!response.ok) {
+        throw new Error("Failed to fetch events");
+      }
+      console.log("Data fetched successfully");
+
+      const data = await response.json();
+      console.log(data);
+
+      setEvents(data); // Update state with fetched events
+    } catch (error) {
+      console.error("Error fetching events:", error);
+    }
+  };
+
+  // Fetch events when the component mounts
+  useEffect(() => {
+    fetchEvents();
+  }, []); // Re-run whenever events state changes
 
   // Function to get the number of days in a month
   const getDaysInMonth = (year, month) => {
@@ -73,16 +91,24 @@ function Calendar() {
     // Create an array of days in the month
     const days = Array.from({ length: daysInMonth }, (_, index) => index + 1);
 
-    // Create an object to store events by date
-    const eventsByDate = {};
-    for (let event of events) {
+    // Filter events for the current month
+    const eventsInMonth = events.filter((event) => {
+      const eventDate = new Date(event.date);
+      return (
+        eventDate.getUTCFullYear() === year && eventDate.getUTCMonth() === month
+      );
+    });
+
+    // Group events by day
+    const eventsByDay = {};
+    eventsInMonth.forEach((event) => {
       const eventDate = new Date(event.date);
       const dayOfMonth = eventDate.getUTCDate();
-      if (!eventsByDate[dayOfMonth]) {
-        eventsByDate[dayOfMonth] = [];
+      if (!eventsByDay[dayOfMonth]) {
+        eventsByDay[dayOfMonth] = [];
       }
-      eventsByDate[dayOfMonth].push(event);
-    }
+      eventsByDay[dayOfMonth].push(event);
+    });
 
     // Create an array of cells for the calendar grid
     const cells = [];
@@ -100,7 +126,7 @@ function Calendar() {
 
     // Add cells for the days in the month
     for (let day of days) {
-      const dayEvents = eventsByDate[day] || [];
+      const dayEvents = eventsByDay[day] || [];
       const handleEventClick = (event) => {
         setSelectedEvent(event);
       };

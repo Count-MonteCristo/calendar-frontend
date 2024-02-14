@@ -19,11 +19,23 @@ function CalendarPage() {
   };
 
   // Function to handle logout/sign out
-  const handleLogout = () => {
-    // Clear user token or perform logout action here
-    localStorage.removeItem("token");
-    // Redirect to the login page
-    window.location.href = "/login"; // Forcing full page reload to clear state
+  const handleLogout = async () => {
+    try {
+      let headers = {};
+      const response = await fetch(`http://localhost:3000/users/sign_out`, {
+        method: "DELETE",
+        headers: headers,
+      });
+      if (!response.ok) {
+        throw new Error("Failed to logout");
+      }
+
+      // Redirect to the login page
+      window.location.href = "/login"; // Forcing full page reload to clear state
+    } catch (error) {
+      console.error("Error logging out:", error);
+      // Handle error
+    }
   };
 
   // Function to handle creating a new event
