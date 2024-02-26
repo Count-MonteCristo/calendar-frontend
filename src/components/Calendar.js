@@ -15,7 +15,10 @@ function Calendar() {
   // Function to fetch events from the API
   const fetchEvents = async () => {
     try {
-      const response = await fetch("http://localhost:3000/api/v1/events");
+      const response = await fetch("http://localhost:3000/api/v1/events", {
+        credentials: "include",
+      });
+
       if (!response.ok) {
         throw new Error("Failed to fetch events");
       }
@@ -24,7 +27,7 @@ function Calendar() {
       const data = await response.json();
       console.log(data);
 
-      setEvents(data); // Update state with fetched events
+      setEvents(data);
     } catch (error) {
       console.error("Error fetching events:", error);
     }

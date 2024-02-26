@@ -14,12 +14,12 @@ function LoginForm() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          credentials: "include",
         },
         body: JSON.stringify({ user: { email, password } }),
       });
       const data = await response.json();
       if (response.ok) {
-        localStorage.setItem("token", data.token);
         navigate("/calendar");
       } else {
         console.error("Login failed:", data.error);
