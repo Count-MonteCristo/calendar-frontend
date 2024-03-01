@@ -16,6 +16,7 @@ function EventDetailsPopup({ event, onClose }) {
         `http://localhost:3000/api/v1/events/${event.id}`,
         {
           method: "DELETE",
+          credentials: "include",
         }
       );
       if (!response.ok) {

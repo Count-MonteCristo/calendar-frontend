@@ -21,10 +21,9 @@ function CalendarPage() {
   // Function to handle logout/sign out
   const handleLogout = async () => {
     try {
-      let headers = {};
-      const response = await fetch(`http://localhost:3000/users/sign_out`, {
+      const response = await fetch(`/users/sign_out`, {
         method: "DELETE",
-        headers: headers,
+        credentials: "include",
       });
       if (!response.ok) {
         throw new Error("Failed to logout");

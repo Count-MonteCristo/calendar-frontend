@@ -17,8 +17,9 @@ function NewEventPopup({ onClose }) {
         .toISOString()
         .substr(11, 5);
 
-      const response = await fetch("http://localhost:3000/api/v1/events", {
+      const response = await fetch("/api/v1/events", {
         method: "POST",
+        credentials: "include",
         headers: {
           "Content-Type": "application/json",
         },
@@ -29,7 +30,6 @@ function NewEventPopup({ onClose }) {
             time: formattedTime,
             location,
             description,
-            user_id: 1, // Assuming user_id is hardcoded for now
           },
         }),
       });
