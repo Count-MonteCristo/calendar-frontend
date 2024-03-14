@@ -1,6 +1,7 @@
 // UpdateEventPopup.js
 import React, { useState, useEffect } from "react";
 import "./css/NewEventPopupStyles.css";
+import { useCookies } from "react-cookie";
 
 function UpdateEventPopup({ eventId, onClose, onUpdate }) {
   const [event, setEvent] = useState({
@@ -11,12 +12,14 @@ function UpdateEventPopup({ eventId, onClose, onUpdate }) {
     description: "",
   });
 
+  const [cookies] = useCookies(["csrftoken"]);
+
   useEffect(() => {
     const fetchEvent = async () => {
       try {
-        const response = await fetch(
-          `http://localhost:3000/api/v1/events/${eventId}`
-        );
+        const response = await fetch(`/api/v1/events/${eventId}`, {
+          credentials: "include",
+        });
         if (!response.ok) {
           throw new Error("Failed to fetch event details");
         }
@@ -37,16 +40,14 @@ function UpdateEventPopup({ eventId, onClose, onUpdate }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch(
-        `http://localhost:3000/api/v1/events/${eventId}`,
-        {
-          method: "PATCH",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(event),
-        }
-      );
+      const response = await fetch(`/api/v1/events/${eventId}`, {
+        method: "PATCH",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(event),
+      });
       if (!response.ok) {
         throw new Error("Failed to update event");
       }

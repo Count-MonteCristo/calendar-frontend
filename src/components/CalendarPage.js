@@ -2,9 +2,11 @@ import React, { useState } from "react";
 import "./css/CalendarPageStyles.css";
 import Calendar from "./Calendar";
 import NewEventPopup from "./NewEventPopup";
+import { useCookies } from 'react-cookie';
 
 function CalendarPage() {
   const [showNewEventPopup, setShowNewEventPopup] = useState(false);
+  const [cookies] = useCookies(['csrftoken']);
 
   // Function to get greeting based on the time of the day
   const getGreeting = () => {
@@ -21,10 +23,13 @@ function CalendarPage() {
   // Function to handle logout/sign out
   const handleLogout = async () => {
     try {
-      let headers = {};
-      const response = await fetch(`http://localhost:3000/users/sign_out`, {
+      const response = await fetch(`/users/sign_out`, {
         method: "DELETE",
-        headers: headers,
+        headers: {
+          "content-type": "application/json",
+          credentials: "include",
+          'X-CSRF-TOKEN': cookies.csrftoken, 
+        },
       });
       if (!response.ok) {
         throw new Error("Failed to logout");

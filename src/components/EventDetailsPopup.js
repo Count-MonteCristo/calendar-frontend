@@ -2,9 +2,11 @@
 import React, { useState } from "react";
 import "./css/EventDetailsPopupStyles.css";
 import UpdateEventPopup from "./UpdateEventPopup ";
+import { useCookies } from 'react-cookie';
 
 function EventDetailsPopup({ event, onClose }) {
   const [showUpdatePopup, setShowUpdatePopup] = useState(false);
+  const [cookies] = useCookies(['csrftoken']);
 
   const handleEdit = () => {
     setShowUpdatePopup(true);
@@ -13,9 +15,14 @@ function EventDetailsPopup({ event, onClose }) {
   const handleDelete = async () => {
     try {
       const response = await fetch(
-        `http://localhost:3000/api/v1/events/${event.id}`,
+        `/api/v1/events/${event.id}`,
         {
           method: "DELETE",
+          headers: {
+            "content-type": "application/json",
+            credentials: "include",
+            'X-CSRF-TOKEN': cookies.csrftoken, 
+          },
         }
       );
       if (!response.ok) {

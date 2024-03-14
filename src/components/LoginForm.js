@@ -10,16 +10,16 @@ function LoginForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch("http://localhost:3000/users/sign_in", {
+      const response = await fetch("/users/sign_in", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          credentials: "include",
         },
         body: JSON.stringify({ user: { email, password } }),
       });
       const data = await response.json();
       if (response.ok) {
-        localStorage.setItem("token", data.token);
         navigate("/calendar");
       } else {
         console.error("Login failed:", data.error);

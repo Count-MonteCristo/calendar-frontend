@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./css/CalendarStyles.css";
 import EventDetailsPopup from "./EventDetailsPopup";
+import { useCookies } from "react-cookie";
 
 function Calendar() {
   // Initial state for the current date
@@ -12,10 +13,20 @@ function Calendar() {
   // State to store fetched events
   const [events, setEvents] = useState([]);
 
+  const [cookies] = useCookies(["csrftoken"]);
+
   // Function to fetch events from the API
   const fetchEvents = async () => {
     try {
-      const response = await fetch("http://localhost:3000/api/v1/events");
+      const response = await fetch("/api/v1/events", {
+        method: "GET",
+        headers: {
+          "content-type": "application/json",
+          credentials: "include",
+          "X-CSRF-TOKEN": cookies.csrftoken,
+        },
+      });
+
       if (!response.ok) {
         throw new Error("Failed to fetch events");
       }
@@ -24,7 +35,7 @@ function Calendar() {
       const data = await response.json();
       console.log(data);
 
-      setEvents(data); // Update state with fetched events
+      setEvents(data);
     } catch (error) {
       console.error("Error fetching events:", error);
     }
