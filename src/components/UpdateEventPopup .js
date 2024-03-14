@@ -1,6 +1,7 @@
 // UpdateEventPopup.js
 import React, { useState, useEffect } from "react";
 import "./css/NewEventPopupStyles.css";
+import { useCookies } from "react-cookie";
 
 function UpdateEventPopup({ eventId, onClose, onUpdate }) {
   const [event, setEvent] = useState({
@@ -10,6 +11,8 @@ function UpdateEventPopup({ eventId, onClose, onUpdate }) {
     location: "",
     description: "",
   });
+
+  const [cookies] = useCookies(["csrftoken"]);
 
   useEffect(() => {
     const fetchEvent = async () => {

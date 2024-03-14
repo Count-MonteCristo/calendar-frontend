@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import "./css/NewEventPopupStyles.css";
+import { useCookies } from 'react-cookie';
 
 function NewEventPopup({ onClose }) {
   const [title, setTitle] = useState("");
@@ -8,6 +9,7 @@ function NewEventPopup({ onClose }) {
   const [location, setLocation] = useState("");
   const [description, setDescription] = useState("");
   const [error, setError] = useState("");
+  const [cookies] = useCookies(['csrftoken']);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -19,9 +21,10 @@ function NewEventPopup({ onClose }) {
 
       const response = await fetch("/api/v1/events", {
         method: "POST",
-        credentials: "include",
         headers: {
-          "Content-Type": "application/json",
+          "content-type": "application/json",
+          credentials: "include",
+          'X-CSRF-TOKEN': cookies.csrftoken, 
         },
         body: JSON.stringify({
           event: {
