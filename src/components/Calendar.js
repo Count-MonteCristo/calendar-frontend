@@ -22,9 +22,9 @@ function Calendar() {
         method: "GET",
         headers: {
           "content-type": "application/json",
-          credentials: "include",
           "X-CSRF-TOKEN": cookies.csrftoken,
         },
+        credentials: "include",
       });
 
       if (!response.ok) {

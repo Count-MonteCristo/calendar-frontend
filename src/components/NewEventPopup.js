@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "./css/NewEventPopupStyles.css";
-import { useCookies } from 'react-cookie';
+import { useCookies } from "react-cookie";
 
 function NewEventPopup({ onClose }) {
   const [title, setTitle] = useState("");
@@ -9,7 +9,7 @@ function NewEventPopup({ onClose }) {
   const [location, setLocation] = useState("");
   const [description, setDescription] = useState("");
   const [error, setError] = useState("");
-  const [cookies] = useCookies(['csrftoken']);
+  const [cookies] = useCookies();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -23,8 +23,7 @@ function NewEventPopup({ onClose }) {
         method: "POST",
         headers: {
           "content-type": "application/json",
-          credentials: "include",
-          'X-CSRF-TOKEN': cookies.csrftoken, 
+          "X-CSRF-TOKEN": cookies["CSRF-TOKEN"],
         },
         body: JSON.stringify({
           event: {
@@ -35,6 +34,7 @@ function NewEventPopup({ onClose }) {
             description,
           },
         }),
+        credentials: "include",
       });
       if (!response.ok) {
         throw new Error("Failed to create event");

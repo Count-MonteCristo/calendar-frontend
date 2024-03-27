@@ -6,7 +6,7 @@ import { useCookies } from 'react-cookie';
 
 function CalendarPage() {
   const [showNewEventPopup, setShowNewEventPopup] = useState(false);
-  const [cookies] = useCookies(['csrftoken']);
+  const [cookies] = useCookies();
 
   // Function to get greeting based on the time of the day
   const getGreeting = () => {
@@ -27,9 +27,9 @@ function CalendarPage() {
         method: "DELETE",
         headers: {
           "content-type": "application/json",
-          credentials: "include",
-          'X-CSRF-TOKEN': cookies.csrftoken, 
+          "X-CSRF-TOKEN": cookies["CSRF-TOKEN"], 
         },
+        credentials: "include",
       });
       if (!response.ok) {
         throw new Error("Failed to logout");
