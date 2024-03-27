@@ -12,7 +12,7 @@ function UpdateEventPopup({ eventId, onClose, onUpdate }) {
     description: "",
   });
 
-  const [cookies] = useCookies(["csrftoken"]);
+  const [cookies] = useCookies();
 
   useEffect(() => {
     const fetchEvent = async () => {
@@ -45,6 +45,7 @@ function UpdateEventPopup({ eventId, onClose, onUpdate }) {
         credentials: "include",
         headers: {
           "Content-Type": "application/json",
+          "X-CSRF-TOKEN": cookies["CSRF-TOKEN"],
         },
         body: JSON.stringify(event),
       });

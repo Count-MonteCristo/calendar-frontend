@@ -6,7 +6,7 @@ import { useCookies } from 'react-cookie';
 
 function EventDetailsPopup({ event, onClose }) {
   const [showUpdatePopup, setShowUpdatePopup] = useState(false);
-  const [cookies] = useCookies(['csrftoken']);
+  const [cookies] = useCookies();
 
   const handleEdit = () => {
     setShowUpdatePopup(true);
@@ -20,9 +20,9 @@ function EventDetailsPopup({ event, onClose }) {
           method: "DELETE",
           headers: {
             "content-type": "application/json",
-            credentials: "include",
-            'X-CSRF-TOKEN': cookies.csrftoken, 
+            "X-CSRF-TOKEN": cookies["CSRF-TOKEN"], 
           },
+          credentials: "include",
         }
       );
       if (!response.ok) {

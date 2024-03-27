@@ -14,9 +14,9 @@ function LoginForm() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          credentials: "include",
         },
         body: JSON.stringify({ user: { email, password } }),
+        credentials: "include",
       });
       const data = await response.json();
       if (response.ok) {
